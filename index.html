@@ -54,7 +54,7 @@
 					const { value } = event.target
 					const duiNumber = value.replace(/-/g, '')
 
-					if(!Number(duiNumber)){
+					if(!Number(duiNumber) && duiNumber != 0){
 						this.dui = this.dui.slice(0, -1)
 					}else if(event.keyCode != 8 && (duiNumber.length == 3 || duiNumber.length == 10)){
 						this.dui = this.dui + '-'
