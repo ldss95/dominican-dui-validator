@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>DUI Validator</title>
+	<link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+	<div id="app">
+		<div id="title">
+			<h1>VALIDAR</h1>
+			<h3>Cedula Dominicana</h3>
+		</div>
+		
+
+		<div id="card">
+			<label for="dui">Numero de cedula</label>
+			<input
+				id="dui"
+				type="text"
+				@keyup="inputHandler"
+				autofocus
+				v-model="dui"
+				maxlength="13"
+			/>
+			<br>
+
+			<div
+				id="status"
+				:class="{
+					valid: dui.length == 13 && duiIsValid,
+					invalid: dui.length == 13 && !duiIsValid,
+					writing: dui.length > 0 && dui.length < 13
+				}"
+			>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				dui: ''
+			},
+			methods:{
+				inputHandler: function(event){
+					const { value } = event.target
+					const duiNumber = value.replace(/-/g, '')
+
+					if(!Number(duiNumber)){
+						this.dui = this.dui.slice(0, -1)
+					}else if(event.keyCode != 8 && (duiNumber.length == 3 || duiNumber.length == 10)){
+						this.dui = this.dui + '-'
+					}
+				}
+			},
+			computed: {
+				duiIsValid: function(){
+					const dui = this.dui.replace(/-/g, '')
+					let isValid = false;
+					let sum = 0;
+
+					if(!dui || dui.length != 11){
+						return isValid;
+					}
+
+					const duiIndividualDigits = dui.split('');
+					duiIndividualDigits.forEach((digit, index) => {
+						if((index + 1) == dui.length){
+							return;
+						}
+
+						digit = Number(digit);
+						const multipler = (index % 2) ? 2: 1;
+
+						if((digit * multipler) > 9){
+							sum += Number((digit * multipler).toString().charAt(0));
+							sum += Number((digit * multipler).toString().charAt(1));
+						}else{
+							sum += digit * multipler;
+						}
+					})
+
+					const topTen = (Math.floor(sum / 10) + 1) * 10;
+					const lastDigit = Number(duiIndividualDigits.pop());
+
+					if(lastDigit == (topTen - sum)){
+						isValid = true;
+					}
+
+					return isValid;
+				}
+			}
+		})
+	</script>
+</body>
+</html>
