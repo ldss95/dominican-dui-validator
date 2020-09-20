@@ -12,12 +12,9 @@ function duiIsValid(dui: string): boolean {
 	}
 
 	const duiIndividualDigits: string[] = dui.split('');
-	duiIndividualDigits.forEach((digit: string | number, index: number) => {
-		//Ignoramos el ultimo digito
-		if((index + 1) == dui.length){
-			return;
-		}
+	const lastDigit: number = Number(duiIndividualDigits.pop());
 
+	duiIndividualDigits.forEach((digit: string | number, index: number) => {
 		digit = Number(digit);
 		const multipler: number = (index % 2) ? 2: 1;
 
@@ -38,7 +35,6 @@ function duiIsValid(dui: string): boolean {
 		ej: la decena superior de 37 es 40
 	*/
 	const topTen: number = (Math.floor(sum / 10) + 1) * 10;
-	const lastDigit: number = Number(duiIndividualDigits.pop());
 
 	if(lastDigit == (topTen - sum)){
 		isValid = true;

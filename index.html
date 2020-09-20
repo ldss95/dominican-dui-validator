@@ -72,11 +72,8 @@
 					}
 
 					const duiIndividualDigits = dui.split('');
+					const lastDigit = Number(duiIndividualDigits.pop());
 					duiIndividualDigits.forEach((digit, index) => {
-						if((index + 1) == dui.length){
-							return;
-						}
-
 						digit = Number(digit);
 						const multipler = (index % 2) ? 2: 1;
 
@@ -89,7 +86,6 @@
 					})
 
 					const topTen = (Math.floor(sum / 10) + 1) * 10;
-					const lastDigit = Number(duiIndividualDigits.pop());
 
 					if(lastDigit == (topTen - sum)){
 						isValid = true;
